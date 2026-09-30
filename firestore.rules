@@ -1,0 +1,104 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return (request.auth != null && request.auth.token.email == 'mdraselislamrana609@gmail.com') ||
+             exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Default deny for unhandled paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Admin whitelist
+    match /admins/{adminId} {
+      allow read, write: if true;
+    }
+
+    // Settings
+    match /settings/{settingId} {
+      allow read, write: if true;
+    }
+
+    // Users
+    match /users/{userId} {
+      allow read, create, update: if true;
+      allow delete: if isAdmin();
+    }
+
+    // Phone lock collection (1 phone = 1 account)
+    match /phones/{phone} {
+      allow read, create: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    // Device lock collection (1 device visitorId = 1 account)
+    match /devices/{visitorId} {
+      allow read, create: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    // FCM tokens lock
+    match /fcm_tokens/{tokenId} {
+      allow read, create: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    // Tasks (admin managed, user read)
+    match /tasks/{taskId} {
+      allow read, write: if true;
+    }
+
+    // Task completions
+    match /task_completions/{completionId} {
+      allow read, create: if true;
+      allow update, delete: if true;
+    }
+
+    // Ad views
+    match /ad_views/{viewId} {
+      allow read, create: if true;
+      allow update, delete: if true;
+    }
+
+    // Spins
+    match /spins/{spinId} {
+      allow read, create: if true;
+      allow update, delete: if true;
+    }
+
+    // Withdrawals
+    match /withdrawals/{withdrawalId} {
+      allow read, create, update: if true;
+      allow delete: if true;
+    }
+
+    // Activations
+    match /activations/{activationId} {
+      allow read, create, update: if true;
+      allow delete: if true;
+    }
+
+    // Notifications
+    match /notifications/{notificationId} {
+      allow read, create, update: if true;
+      allow delete: if true;
+    }
+
+    // Daily referrals rate limiting
+    match /daily_referrals/{docId} {
+      allow read, write: if true;
+    }
+
+    // Suspicious users
+    match /suspicious_users/{flagId} {
+      allow read, write: if true;
+    }
+  }
+}

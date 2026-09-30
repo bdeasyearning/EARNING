@@ -1,0 +1,6 @@
+{
+  "name": "BD Easy Earning",
+  "description": "সহজে আয় করুন, প্রতিদিন! - BD Easy Earning রিওয়ার্ড ও আর্নিং প্ল্যাটফর্ম",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

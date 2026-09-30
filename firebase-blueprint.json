@@ -1,0 +1,267 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with balance, verification status and referral tracking",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "phone": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "balance": { "type": "number" },
+        "totalIncome": { "type": "number" },
+        "totalWithdraw": { "type": "number" },
+        "referralCode": { "type": "string" },
+        "referredBy": { "type": "string" },
+        "totalReferrals": { "type": "number" },
+        "referralIncome": { "type": "number" },
+        "referralBonusPending": { "type": "number" },
+        "referralBonusPaid": { "type": "number" },
+        "firstIncomeDone": { "type": "boolean" },
+        "isVerified": { "type": "boolean" },
+        "isBanned": { "type": "boolean" },
+        "visitorId": { "type": "string" },
+        "role": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "lastActiveAt": { "type": "string" }
+      },
+      "required": ["uid", "phone", "balance"]
+    },
+    "PhoneLock": {
+      "title": "PhoneLock",
+      "description": "Locks a phone number to one user account",
+      "type": "object",
+      "properties": {
+        "phone": { "type": "string" },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["phone", "userId"]
+    },
+    "DeviceLock": {
+      "title": "DeviceLock",
+      "description": "Locks a device fingerprint visitorId to one user account",
+      "type": "object",
+      "properties": {
+        "visitorId": { "type": "string" },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["visitorId", "userId"]
+    },
+    "FcmTokenLock": {
+      "title": "FcmTokenLock",
+      "description": "FCM device push token lock",
+      "type": "object",
+      "properties": {
+        "token": { "type": "string" },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["token", "userId"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Reward task to follow/subscribe",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "link": { "type": "string" },
+        "reward": { "type": "number" },
+        "dailyLimit": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "category": { "type": "string" }
+      },
+      "required": ["title", "link", "reward", "isActive"]
+    },
+    "TaskCompletion": {
+      "title": "TaskCompletion",
+      "description": "Records user completed tasks",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "taskId": { "type": "string" },
+        "reward": { "type": "number" },
+        "completedAt": { "type": "string" },
+        "dateStr": { "type": "string" }
+      },
+      "required": ["userId", "taskId", "reward"]
+    },
+    "AdView": {
+      "title": "AdView",
+      "description": "Log of successful 15s ad views",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "cardId": { "type": "number" },
+        "adUrl": { "type": "string" },
+        "reward": { "type": "number" },
+        "viewedAt": { "type": "string" },
+        "dateStr": { "type": "string" }
+      },
+      "required": ["userId", "cardId", "reward"]
+    },
+    "Spin": {
+      "title": "Spin",
+      "description": "Daily lucky wheel spin record",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "amount": { "type": "number" },
+        "spunAt": { "type": "string" },
+        "dateStr": { "type": "string" }
+      },
+      "required": ["userId", "amount", "spunAt"]
+    },
+    "Withdrawal": {
+      "title": "Withdrawal",
+      "description": "Cash withdrawal request",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPhone": { "type": "string" },
+        "amount": { "type": "number" },
+        "method": { "type": "string" },
+        "accountNumber": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "adminNote": { "type": "string" },
+        "requestedAt": { "type": "string" },
+        "processedAt": { "type": "string" }
+      },
+      "required": ["userId", "amount", "method", "accountNumber", "status"]
+    },
+    "Activation": {
+      "title": "Activation",
+      "description": "Account verification payment/proof request",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPhone": { "type": "string" },
+        "method": { "type": "string" },
+        "trxId": { "type": "string" },
+        "screenshot": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "submittedAt": { "type": "string" }
+      },
+      "required": ["userId", "status", "submittedAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "System or user specific notifications",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "message"]
+    },
+    "DailyReferral": {
+      "title": "DailyReferral",
+      "description": "Daily referral count per user for anti-fraud limiting",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "date": { "type": "string" },
+        "count": { "type": "number" }
+      },
+      "required": ["userId", "date", "count"]
+    },
+    "SuspiciousUser": {
+      "title": "SuspiciousUser",
+      "description": "Auto-flagged suspicious fraud user logs",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userPhone": { "type": "string" },
+        "reason": { "type": "string" },
+        "flaggedAt": { "type": "string" },
+        "reviewed": { "type": "boolean" }
+      },
+      "required": ["userId", "reason"]
+    },
+    "SystemSetting": {
+      "title": "SystemSetting",
+      "description": "Global configurable parameters like minimum withdraw and referral bonus",
+      "type": "object",
+      "properties": {
+        "minWithdraw": { "type": "number" },
+        "minReferralsForWithdraw": { "type": "number" },
+        "referralBonus": { "type": "number" },
+        "referralQualifyIncome": { "type": "number" },
+        "verificationFee": { "type": "number" },
+        "freeVerificationReferrals": { "type": "number" },
+        "bkashNumber": { "type": "string" },
+        "nagadNumber": { "type": "string" },
+        "noticeText": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles with balance, tier, and status"
+    },
+    "/phones/{phone}": {
+      "schema": "PhoneLock",
+      "description": "Unique phone registry to enforce 1 phone = 1 account"
+    },
+    "/devices/{visitorId}": {
+      "schema": "DeviceLock",
+      "description": "Device visitorId registry to block multi-accounting on the same device"
+    },
+    "/fcm_tokens/{tokenId}": {
+      "schema": "FcmTokenLock",
+      "description": "Push notification token registry"
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Daily tasks available to users"
+    },
+    "/task_completions/{completionId}": {
+      "schema": "TaskCompletion",
+      "description": "User completed task records"
+    },
+    "/ad_views/{viewId}": {
+      "schema": "AdView",
+      "description": "Daily ad watch events"
+    },
+    "/spins/{spinId}": {
+      "schema": "Spin",
+      "description": "Wheel spin history"
+    },
+    "/withdrawals/{withdrawalId}": {
+      "schema": "Withdrawal",
+      "description": "Withdrawal requests for manual/auto payout"
+    },
+    "/activations/{activationId}": {
+      "schema": "Activation",
+      "description": "Account verification payment records"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "User and broadcast announcements"
+    },
+    "/daily_referrals/{docId}": {
+      "schema": "DailyReferral",
+      "description": "Rate limiting tracking for daily referrals"
+    },
+    "/suspicious_users/{flagId}": {
+      "schema": "SuspiciousUser",
+      "description": "Flagged fraudulent multi-account attempts"
+    },
+    "/settings/{settingId}": {
+      "schema": "SystemSetting",
+      "description": "Global system parameters and payment numbers"
+    },
+    "/admins/{adminUid}": {
+      "schema": "User",
+      "description": "Authorized admin users collection"
+    }
+  }
+}
